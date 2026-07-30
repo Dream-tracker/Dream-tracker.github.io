@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adarsh — Data Scientist</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23171A18'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-weight='700' fill='%231F6F62' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -133,6 +134,10 @@
   .hero-chart-caption{
     font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--ink-soft);
     margin-top:10px;opacity:0.75;
+  }
+  .hero-chart-axis{
+    display:flex;justify-content:space-between;
+    font-size:0.68rem;color:var(--ink-soft);opacity:0.7;margin-top:2px;
   }
 
   /* Section headers */
@@ -266,19 +271,23 @@
     </div>
     <div class="hero-chart-wrap">
       <div class="hero-chart-head">
-        <span>training_run.py</span>
-        <span>epoch <span id="epoch-val">00</span>/40 · loss <span id="loss-val">1.00</span></span>
+        <span>learning_curve.py</span>
+        <span>year <span id="epoch-val">2024</span> · growth <span id="loss-val">0%</span></span>
       </div>
       <svg id="lossChart" viewBox="0 0 340 160" width="100%" height="160">
         <line x1="0" y1="20" x2="340" y2="20" stroke="#E3E1D7" stroke-width="1"/>
         <line x1="0" y1="70" x2="340" y2="70" stroke="#E3E1D7" stroke-width="1"/>
         <line x1="0" y1="120" x2="340" y2="120" stroke="#E3E1D7" stroke-width="1"/>
-        <path id="lossPath" d="M0,10 C 40,20 80,55 120,80 C 160,100 200,112 240,120 C 280,126 310,130 340,132"
+        <path id="lossPath" d="M0,150 C 40,140 80,120 120,95 C 160,70 200,45 240,30 C 280,20 310,14 340,8"
           fill="none" stroke="#1F6F62" stroke-width="2.5" stroke-linecap="round"
           stroke-dasharray="500" stroke-dashoffset="500"/>
-        <circle id="lossDot" cx="0" cy="10" r="4" fill="#C98A2C"/>
+        <circle id="lossDot" cx="0" cy="150" r="4" fill="#C98A2C"/>
       </svg>
-      <div class="hero-chart-caption">// illustrative training curve, for flavor only</div>
+      <div class="hero-chart-axis mono">
+        <span>2024</span>
+        <span>Present</span>
+      </div>
+      <div class="hero-chart-caption">// learning curve, growing since 2024</div>
     </div>
   </div>
 </section>
@@ -390,7 +399,7 @@
           <span class="tag">Pandas</span>
           <span class="tag">Matplotlib</span>
         </div>
-        <a href="https://github.com/Dream-tracker/Data-Science-Journey" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
+        <a href="https://github.com/Dream-tracker/Forex-Trading-Strategy-Backtesting" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
       </div>
       <div class="card reveal">
         <div class="card-metric">Classification · LogReg / Tree / RF</div>
@@ -401,7 +410,7 @@
           <span class="tag">scikit-learn</span>
           <span class="tag">Pandas</span>
         </div>
-        <a href="https://github.com/Dream-tracker/Data-Science-Journey" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
+        <a href="https://github.com/Dream-tracker/credit-approval-prediction" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
       </div>
       <div class="card reveal">
         <div class="card-metric">Tooling · Automated data audits</div>
@@ -473,8 +482,8 @@
     dot.setAttribute('cx', pt.x);
     dot.setAttribute('cy', pt.y);
 
-    epochEl.textContent = String(Math.floor(progress * 40)).padStart(2,'0');
-    lossEl.textContent = (1 - 0.94 * progress).toFixed(2);
+    epochEl.textContent = String(Math.floor(2024 + progress * 2));
+    lossEl.textContent = Math.round(progress * 92) + '%';
 
     if(progress < 1) requestAnimationFrame(animate);
   }
@@ -482,7 +491,7 @@
     path.style.strokeDashoffset = 0;
     const pt = path.getPointAtLength(len);
     dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
-    epochEl.textContent = '40'; lossEl.textContent = '0.06';
+    epochEl.textContent = '2026'; lossEl.textContent = '92%';
   } else {
     requestAnimationFrame(animate);
   }
