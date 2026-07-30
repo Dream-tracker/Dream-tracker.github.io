@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adarsh — Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F2F1EB;
+    --bg-panel: #EAE8E0;
+    --ink: #171A18;
+    --ink-soft: #4B5049;
+    --line: #D8D5C9;
+    --teal: #1F6F62;
+    --teal-deep: #143F38;
+    --amber: #C98A2C;
+    --white: #FDFCF9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .display{font-family:'Space Grotesk',sans-serif;}
+
+  /* Layout helpers */
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+  section{padding:120px 0;}
+  @media(max-width:640px){ section{padding:80px 0;} .wrap{padding:0 20px;} }
+
+  /* Nav */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(242,241,235,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    max-width:1120px;margin:0 auto;padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-brand{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:-0.01em;}
+  .nav-brand .dot{color:var(--teal);}
+  .nav-links{display:flex;gap:32px;font-size:0.92rem;}
+  .nav-links a{
+    color:var(--ink-soft);
+    position:relative;
+    transition:color .2s ease;
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--teal);
+    transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none;background:none;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:1rem;color:var(--ink);}
+  @media(max-width:720px){
+    .nav-links{
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--bg);border-bottom:1px solid var(--line);
+      flex-direction:column;gap:0;
+      max-height:0;overflow:hidden;
+      transition:max-height .3s ease;
+    }
+    .nav-links.open{max-height:260px;}
+    .nav-links a{padding:14px 32px;border-top:1px solid var(--line);}
+    .nav-toggle{display:block;}
+  }
+
+  /* Hero */
+  .hero{
+    padding:190px 0 100px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center;
+  }
+  @media(max-width:880px){ .hero-grid{grid-template-columns:1fr;} .hero-chart-wrap{order:-1;} }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--teal-deep);
+    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:'';width:8px;height:8px;border-radius:50%;background:var(--teal);
+    box-shadow:0 0 0 4px rgba(31,111,98,0.15);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem,6vw,4.4rem);
+    font-weight:700;letter-spacing:-0.02em;line-height:1.02;
+    margin-bottom:20px;
+  }
+  .hero h1 span{color:var(--teal);}
+  .hero p.lede{
+    font-size:1.15rem;color:var(--ink-soft);max-width:480px;margin-bottom:36px;
+  }
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:0.85rem;
+    padding:13px 24px;border-radius:2px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .btn-primary{background:var(--ink);color:var(--white);}
+  .btn-primary:hover{background:var(--teal-deep);transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px);}
+
+  /* hero chart signature element */
+  .hero-chart-wrap{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:24px 20px 18px;
+  }
+  .hero-chart-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);
+    margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;
+  }
+  #epoch-val, #loss-val{color:var(--teal-deep);font-weight:600;}
+  .hero-chart-caption{
+    font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--ink-soft);
+    margin-top:10px;opacity:0.75;
+  }
+
+  /* Section headers */
+  .sec-head{margin-bottom:56px;}
+  .sec-eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--teal-deep);
+    letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;
+  }
+  .sec-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:600;letter-spacing:-0.01em;}
+  .sec-head p{color:var(--ink-soft);max-width:520px;margin-top:14px;font-size:1.02rem;}
+
+  /* About */
+  .about{background:var(--bg-panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .about-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;}
+  @media(max-width:640px){.about-grid{grid-template-columns:1fr;}}
+  .avatar{
+    width:160px;height:160px;border-radius:4px;
+    background:linear-gradient(135deg,var(--teal),var(--teal-deep));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--white);font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;
+  }
+  .about-body p{color:var(--ink-soft);margin-bottom:16px;font-size:1.02rem;max-width:640px;}
+  .about-stats{display:flex;gap:36px;margin-top:28px;flex-wrap:wrap;}
+  .stat-num{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;color:var(--teal-deep);}
+  .stat-label{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.06em;}
+
+  /* Education */
+  .edu-card{
+    background:var(--white);border:1px solid var(--line);border-radius:4px;
+    padding:32px;
+  }
+  .edu-row{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;}
+  .edu-row h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin-bottom:4px;}
+  .edu-sub{color:var(--ink-soft);font-size:0.95rem;}
+  .edu-date{color:var(--teal-deep);font-size:0.85rem;white-space:nowrap;}
+
+  /* Skills */
+  .skill-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;}
+  @media(max-width:640px){.skill-groups{grid-template-columns:1fr;}}
+  .skill-group h3{
+    font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .skill-group h3::before{content:'▸';color:var(--teal);}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:0.78rem;
+    padding:7px 12px;background:var(--white);border:1px solid var(--line);border-radius:2px;
+    color:var(--ink-soft);
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .tag:hover{border-color:var(--teal);color:var(--ink);}
+
+  /* Projects */
+  .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media(max-width:880px){.project-grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--white);border:1px solid var(--line);border-radius:4px;
+    padding:28px;display:flex;flex-direction:column;height:100%;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(23,26,24,0.08);}
+  .card-metric{
+    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--teal-deep);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;
+  }
+  .card h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:10px;}
+  .card p{color:var(--ink-soft);font-size:0.95rem;margin-bottom:20px;flex-grow:1;}
+  .card .tag-row{margin-bottom:20px;}
+  .card-link{
+    font-family:'IBM Plex Mono',monospace;font-size:0.82rem;color:var(--teal-deep);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .card-link::after{content:'→';transition:transform .2s ease;}
+  .card:hover .card-link::after{transform:translateX(4px);}
+
+  /* Contact */
+  .contact{
+    background:var(--ink);color:var(--white);
+    border-radius:4px;
+    padding:64px 48px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;
+  }
+  .contact h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:600;max-width:480px;letter-spacing:-0.01em;}
+  .contact-links{display:flex;flex-direction:column;gap:14px;}
+  .contact-links a{
+    font-family:'IBM Plex Mono',monospace;font-size:0.95rem;
+    display:flex;align-items:center;gap:10px;color:rgba(253,252,249,0.85);
+    transition:color .2s ease;
+  }
+  .contact-links a:hover{color:var(--white);}
+  .contact-links a::before{content:'—';color:var(--teal);}
+
+  footer{padding:40px 0;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--ink-soft);}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="nav-brand">Adarsh<span class="dot">.</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Aspiring Data Scientist</div>
+      <h1>Turning messy data<br>into <span>clear decisions</span>.</h1>
+      <p class="lede">I'm Adarsh, a B.Tech Computer Science student and IBM-certified data scientist. I build independent, end-to-end projects — cleaning data, exploring it, and turning it into models that actually predict something.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-chart-wrap">
+      <div class="hero-chart-head">
+        <span>training_run.py</span>
+        <span>epoch <span id="epoch-val">00</span>/40 · loss <span id="loss-val">1.00</span></span>
+      </div>
+      <svg id="lossChart" viewBox="0 0 340 160" width="100%" height="160">
+        <line x1="0" y1="20" x2="340" y2="20" stroke="#E3E1D7" stroke-width="1"/>
+        <line x1="0" y1="70" x2="340" y2="70" stroke="#E3E1D7" stroke-width="1"/>
+        <line x1="0" y1="120" x2="340" y2="120" stroke="#E3E1D7" stroke-width="1"/>
+        <path id="lossPath" d="M0,10 C 40,20 80,55 120,80 C 160,100 200,112 240,120 C 280,126 310,130 340,132"
+          fill="none" stroke="#1F6F62" stroke-width="2.5" stroke-linecap="round"
+          stroke-dasharray="500" stroke-dashoffset="500"/>
+        <circle id="lossDot" cx="0" cy="10" r="4" fill="#C98A2C"/>
+      </svg>
+      <div class="hero-chart-caption">// illustrative training curve, for flavor only</div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="avatar">A</div>
+    <div class="about-body reveal">
+      <div class="sec-eyebrow">About</div>
+      <p>I'm a B.Tech Computer Science Engineering student (expected 2028) at Guru Jambheshwar University of Science &amp; Technology, Hisar, with an IBM Data Science certification and hands-on experience in Python, data analysis, and visualization.</p>
+      <p>I build independent, end-to-end data science projects — covering data cleaning, exploratory analysis, and predictive modeling — and document the work on a growing GitHub portfolio. I'm especially drawn to projects where a model has to hold up against real, messy data.</p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">Projects shipped</div>
+        </div>
+        <div>
+          <div class="stat-num">IBM</div>
+          <div class="stat-label">Data Science cert</div>
+        </div>
+        <div>
+          <div class="stat-num">2028</div>
+          <div class="stat-label">Expected graduation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Background</div>
+      <h2>Education &amp; training</h2>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-row">
+        <div>
+          <h3>B.Tech, Computer Science Engineering</h3>
+          <p class="edu-sub">Guru Jambheshwar University of Science &amp; Technology, Hisar</p>
+        </div>
+        <div class="edu-date mono">2024 — 2028</div>
+      </div>
+      <div class="tag-row" style="margin-top:18px;">
+        <span class="tag">IBM Data Science Certification</span>
+        <span class="tag">Statistics fundamentals</span>
+        <span class="tag">Basic ML concepts</span>
+        <span class="tag">Jupyter Notebook practicals</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Toolkit</div>
+      <h2>Skills &amp; stack</h2>
+      <p>The languages, libraries, and tools I use most when turning a question into an answer.</p>
+    </div>
+    <div class="skill-groups">
+      <div class="skill-group reveal">
+        <h3>Programming</h3>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Data Analysis &amp; Manipulation</h3>
+        <div class="tag-row">
+          <span class="tag">Pandas</span>
+          <span class="tag">NumPy</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Visualization</h3>
+        <div class="tag-row">
+          <span class="tag">Matplotlib</span>
+          <span class="tag">Seaborn</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <h3>Tools &amp; Platforms</h3>
+        <div class="tag-row">
+          <span class="tag">Jupyter Notebook</span>
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Selected work</div>
+      <h2>Projects</h2>
+      <p>A few pieces of work I'm proud of — swap these for your own case studies whenever you're ready.</p>
+    </div>
+    <div class="project-grid">
+      <div class="card reveal">
+        <div class="card-metric">Backtesting · ~33% win rate, 1:2 R:R</div>
+        <h3>Forex Trading Strategy Backtesting</h3>
+        <p>A Python backtesting system for a rule-based EUR/USD strategy, with support-resistance detection and trade simulation. A cooldown mechanism cut trades from 6,000+ down to ~300, curbing overtrading, with results summarized in visualized equity curves.</p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">Matplotlib</span>
+        </div>
+        <a href="https://github.com/Dream-tracker/Data-Science-Journey" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-metric">Classification · LogReg / Tree / RF</div>
+        <h3>Credit Card Approval Prediction</h3>
+        <p>Predicts credit application approval on the UCI Credit Approval dataset — cleaning and encoding features, handling missing values and class imbalance, then comparing Logistic Regression, Decision Tree, and Random Forest classifiers on accuracy, precision, and recall.</p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">scikit-learn</span>
+          <span class="tag">Pandas</span>
+        </div>
+        <a href="https://github.com/Dream-tracker/Data-Science-Journey" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-metric">Tooling · Automated data audits</div>
+        <h3>Automated EDA Report Generator</h3>
+        <p>A Python tool that takes any CSV and auto-generates a data profiling report — flagging missing values, duplicate rows, type mismatches, and ambiguous columns — and outputs a clean HTML/PDF summary.</p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">ydata-profiling</span>
+          <span class="tag">Jupyter</span>
+        </div>
+        <a href="https://github.com/Dream-tracker/Data-Science-Journey" target="_blank" rel="noopener" class="card-link">View on GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <h2>Let's talk data,<br>or anything in between.</h2>
+      <div class="contact-links">
+        <a href="mailto:adarshku798@gmail.com">adarshku798@gmail.com</a>
+        <a href="tel:+919529304199">+91 95293 04199</a>
+        <a href="https://github.com/Dream-tracker" target="_blank" rel="noopener">github.com/Dream-tracker</a>
+        <a href="https://www.linkedin.com/in/adarsh-339759356/" target="_blank" rel="noopener">linkedin.com/in/adarsh-339759356</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Adarsh · Built with data, curiosity, and a lot of coffee</div>
+</footer>
+
+<script>
+  // mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  reveals.forEach(el => io.observe(el));
+
+  // hero loss-curve animation (signature element)
+  const path = document.getElementById('lossPath');
+  const dot = document.getElementById('lossDot');
+  const epochEl = document.getElementById('epoch-val');
+  const lossEl = document.getElementById('loss-val');
+  const len = path.getTotalLength();
+  path.style.strokeDasharray = len;
+  path.style.strokeDashoffset = len;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const duration = prefersReduced ? 0 : 2400;
+  let start = null;
+
+  function animate(ts){
+    if(!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const drawLen = len * progress;
+    path.style.strokeDashoffset = len - drawLen;
+
+    const pt = path.getPointAtLength(drawLen);
+    dot.setAttribute('cx', pt.x);
+    dot.setAttribute('cy', pt.y);
+
+    epochEl.textContent = String(Math.floor(progress * 40)).padStart(2,'0');
+    lossEl.textContent = (1 - 0.94 * progress).toFixed(2);
+
+    if(progress < 1) requestAnimationFrame(animate);
+  }
+  if(prefersReduced){
+    path.style.strokeDashoffset = 0;
+    const pt = path.getPointAtLength(len);
+    dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
+    epochEl.textContent = '40'; lossEl.textContent = '0.06';
+  } else {
+    requestAnimationFrame(animate);
+  }
+</script>
+
+</body>
+</html>
