@@ -15,7 +15,7 @@
 html{scroll-behavior:smooth;}
 body{
   background-color:var(--bg);
-  background-image:repeating-linear-gradient(135deg, rgba(60,156,130,0.035) 0px, rgba(60,156,130,0.035) 1px, transparent 1px, transparent 26px);
+  background-image:repeating-linear-gradient(135deg, rgba(60,156,130,0.12) 0px, rgba(60,156,130,0.12) 1px, transparent 1px, transparent 22px);
   background-attachment:fixed;
   color:var(--ink);
   font-family:'Inter',sans-serif;
