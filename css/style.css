@@ -14,7 +14,9 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
-  background:var(--bg);
+  background-color:var(--bg);
+  background-image:repeating-linear-gradient(135deg, rgba(60,156,130,0.035) 0px, rgba(60,156,130,0.035) 1px, transparent 1px, transparent 26px);
+  background-attachment:fixed;
   color:var(--ink);
   font-family:'Inter',sans-serif;
   line-height:1.55;
